@@ -10,7 +10,7 @@ export default function Square({ fieldId }: { fieldId: number }) {
   const [value, setValue] = useState<keyof typeof TURN>()
 
 
-  const { turn, changeTurn, recordMove, winner } = useContext(GameContext);
+  const { turn, changeTurn, recordMove, winner, winningCombination } = useContext(GameContext);
 
   const handleClick = () => {
     if (!content && !winner) {
@@ -21,7 +21,7 @@ export default function Square({ fieldId }: { fieldId: number }) {
     }
   };
 
-  const isWinnerCell = value === winner;
+  const isWinnerCell = winner && value === winner && winningCombination?.includes(fieldId as never);
 
   return (
     <button

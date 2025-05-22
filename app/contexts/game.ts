@@ -1,5 +1,5 @@
 import { createContext, Dispatch } from "react";
-import { TURN } from "../constants";
+import { TURN, WINNING_COMBINATIONS } from "../constants";
 
 export type Move = { turn: keyof typeof TURN; fieldId: number };
 export type Moves = Record<keyof typeof TURN, number[]>;
@@ -12,6 +12,7 @@ const GameContext = createContext<{
   setWinner: Dispatch<React.SetStateAction<keyof typeof TURN | null>>;
   recordMove: (move: Move) => void;
   moves: Moves;
+  winningCombination: typeof WINNING_COMBINATIONS[number] | null;
 }>({
   turn: TURN.X,
   setTurn: () => {
@@ -28,6 +29,7 @@ const GameContext = createContext<{
     throw new Error("recordMove function not implemented");
   },
   moves: { [TURN.X]: [], [TURN.O]: [] },
+  winningCombination: null
 });
 
 

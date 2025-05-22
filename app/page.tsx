@@ -9,6 +9,7 @@ import { GameProvider, Move, Moves } from "./contexts/game";
 export default function Home() {
   const [turn, setTurn] = useState<keyof typeof TURN>(TURN.X);
   const [winner, setWinner] = useState<keyof typeof TURN | null>(null);
+  const [winningCombination, setWinningCombination] = useState<typeof WINNING_COMBINATIONS[number]| null>(null);
   const [moves, setMoves] = useState<Moves>({ [TURN.X]: [], [TURN.O]: [] });
 
   useEffect(() => {
@@ -19,6 +20,7 @@ export default function Home() {
       for (const combination of WINNING_COMBINATIONS) {
         if (new Set(playerMoves).isSupersetOf(new Set(combination))) {
           setWinner(player);
+          setWinningCombination(combination);
         }
       }
     }
@@ -51,6 +53,7 @@ export default function Home() {
           setWinner,
           recordMove,
           moves,
+          winningCombination
         }}
       >
         <Board />
