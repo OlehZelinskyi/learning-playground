@@ -8,11 +8,14 @@ const GameContext = createContext<{
   turn: keyof typeof TURN;
   setTurn: Dispatch<React.SetStateAction<keyof typeof TURN>>;
   changeTurn: VoidFunction;
-  winner: keyof typeof TURN | null;
-  setWinner: Dispatch<React.SetStateAction<keyof typeof TURN | null>>;
+  winner: keyof typeof TURN | "Deuce" | null;
+  setWinner: Dispatch<React.SetStateAction<keyof typeof TURN | "Deuce" | null>>;
   recordMove: (move: Move) => void;
   moves: Moves;
   winningCombination: typeof WINNING_COMBINATIONS[number] | null;
+  isDeuce: () => boolean;
+  restart: () => void;
+  getPlayerByFieldId: (id: number) => keyof typeof TURN | null;
 }>({
   turn: TURN.X,
   setTurn: () => {
@@ -29,7 +32,16 @@ const GameContext = createContext<{
     throw new Error("recordMove function not implemented");
   },
   moves: { [TURN.X]: [], [TURN.O]: [] },
-  winningCombination: null
+  winningCombination: null,
+  isDeuce: () => {
+    throw Error("isDeuce function not implemented")
+  },
+  restart: () => {
+    throw Error("restart function not implemented")
+  },
+  getPlayerByFieldId: () => {
+    throw Error("getPlayerByFieldId function not implemented")
+  }
 });
 
 

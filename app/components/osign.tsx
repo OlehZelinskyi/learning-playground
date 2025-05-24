@@ -8,7 +8,7 @@ export default function OSign() {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className="w-10 h-10 text-gray-500"
+      className="w-10 h-10"
     >
       <circle cx="12" cy="12" r="10" />
     </svg>
