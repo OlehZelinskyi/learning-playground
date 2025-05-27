@@ -14,6 +14,7 @@ export default function Home() {
   const [winner, setWinner] = useState<keyof typeof TURN | "Deuce" | null>(null);
   const [winningCombination, setWinningCombination] = useState<typeof WINNING_COMBINATIONS[number] | null>(null);
   const [moves, setMoves] = useState<Moves>(initialMoves);
+  const [history, setHistory] = useState<Move[]>([])
 
   const isDeuce = useCallback(() => moves[TURN.X].length + moves[TURN.O].length === 9, [moves])
 
@@ -45,6 +46,7 @@ export default function Home() {
       ...prev,
       [move.turn]: [...prev[move.turn], move.fieldId],
     }));
+    setHistory(prev => [...prev, move])
   };
 
   const changeTurn = () => {
@@ -56,6 +58,7 @@ export default function Home() {
     setWinner(null);
     setWinningCombination(null);
     setMoves(initialMoves)
+    setHistory([])
   }
 
   const getPlayerByFieldId = (fieldId: number) => {
@@ -70,6 +73,38 @@ export default function Home() {
     }
 
     return player;
+  }
+
+  const goTo = (move: Move) => {
+    setWinner(null);
+    setTurn(move.turn === TURN.X ? TURN.O : TURN.X);
+
+    // Rollback history
+    setHistory(prev => {
+      const goToIndex = prev.findIndex((record) => record.fieldId === move.fieldId);
+
+      const newHistory = prev.slice(0, goToIndex + 1);
+
+      return newHistory
+
+    })
+
+    // Rollback moves
+    setMoves(prev => {
+      const goToIndex = prev[move.turn].findIndex((fieldId) => fieldId === move.fieldId);
+
+      if (move.turn === TURN.O) {
+        return {
+          [TURN.X]: prev.X.slice(0, goToIndex + 1),
+          [TURN.O]: prev.O.slice(0, goToIndex + 1),
+        }
+      }
+
+      return {
+        [TURN.X]: prev.X.slice(0, goToIndex + 1),
+        [TURN.O]: prev.O.slice(0, goToIndex),
+      }
+    })
   }
 
 
@@ -87,7 +122,9 @@ export default function Home() {
           winningCombination,
           isDeuce,
           restart,
-          getPlayerByFieldId
+          getPlayerByFieldId,
+          history,
+          goTo
         }}
       >
         <Board />

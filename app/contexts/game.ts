@@ -16,6 +16,8 @@ const GameContext = createContext<{
   isDeuce: () => boolean;
   restart: () => void;
   getPlayerByFieldId: (id: number) => keyof typeof TURN | null;
+  history: Move[],
+  goTo: (move: Move) => void;
 }>({
   turn: TURN.X,
   setTurn: () => {
@@ -41,7 +43,11 @@ const GameContext = createContext<{
   },
   getPlayerByFieldId: () => {
     throw Error("getPlayerByFieldId function not implemented")
-  }
+  },
+  goTo: () => {
+    throw Error("goTo function not implemented")
+  },
+  history: []
 });
 
 
