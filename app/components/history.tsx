@@ -1,25 +1,32 @@
-import { useContext } from "react"
-import GameContext, { Move } from "../contexts/game"
+import { use } from "react";
+import GameContext, { Move } from "../contexts/game";
 
 export default function History() {
-    const { history, goTo } = useContext(GameContext)
+  const { history, goTo } = use(GameContext);
 
-    const createMoveToHistoryHandler = (move: Move) => () => {
-        goTo(move);
-    }
+  const createMoveToHistoryHandler = (move: Move) => () => {
+    goTo(move);
+  };
 
-    if (!history.length) return null;
+  if (!history.length) return null;
 
-    return <ul>
-        {history.map((record, index) => {
-            const isLastRecord = index === history.length - 1;
+  return (
+    <ul>
+      {history.map((record, index) => {
+        const isLastRecord = index === history.length - 1;
 
-            return (
-                <li key={index}
-                    className="cursor-pointer hover:text-blue-500"
-                    {...(!isLastRecord && { onClick: createMoveToHistoryHandler(record) })}
-                >Player {record.turn} played field {record.fieldId}</li>
-            );
-        })}
+        return (
+          <li
+            key={index}
+            className="cursor-pointer hover:text-blue-500"
+            {...(!isLastRecord && {
+              onClick: createMoveToHistoryHandler(record),
+            })}
+          >
+            Player {record.turn} played field {record.fieldId}
+          </li>
+        );
+      })}
     </ul>
+  );
 }
